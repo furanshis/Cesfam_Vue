@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
+
 import HomeView from '../views/HomeView.vue'
 import Remedios from  '../views/Remedios.vue'
 import Detalle_remedio from '../views/Detalle_remedio.vue'
@@ -8,6 +10,10 @@ import Carrito from '../views/Carrito.vue'
 import Registro from '../views/Registro.vue'
 import IniciarSesion from '../views/IniciarSesion.vue'
 import Cuenta from '../views/Cuenta.vue'
+import Pago from '../views/Pago.vue'
+import PagoFinalizado from '../views/PagoFinalizado.vue'
+import nosotros from '../views/nosotros.vue' 
+import contacto from '../views/contacto.vue'
 
 const routes = [
   {
@@ -27,6 +33,19 @@ const routes = [
     path: '/Search',
     name: 'Search',
     component: Search
+  },
+  {
+    path: '/carrito/pago',
+    name: 'Pago',
+    component: Pago,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/carrito/pago_finalizado',
+    name: 'PagoFinalizado',
+    component: PagoFinalizado
   },
   {
     path: '/carrito',
@@ -61,13 +80,34 @@ const routes = [
   {
     path: '/cuenta',
     name: 'Cuenta',
-    component: Cuenta
+    component: Cuenta,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/nosotros',
+    name: 'nosotros',
+    component: nosotros
+  },
+  {
+    path: '/contacto',
+    name: 'contacto',
+    component: contacto
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireLogin) && !store.state.isAuthenticated) { ///Esta función es para ver si es requerido logearse y además no se tiene una autenticacion enviara a la pagina de login
+    next ({name: 'IniciarSesion', query: {to: to.path} });
+  } else {
+    next()
+  }
 })
 
 export default router

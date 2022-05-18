@@ -37,13 +37,7 @@
             <router-link to="/carrito/pago" class="button is-dark">Proceder al Pago</router-link>
         </div>
         <!-- paypal --->
-        <div id="app">
-            <paypal-checkout
-            amount="10.00"
-            currency="USD"
-            :client="paypal">
-            </paypal-checkout>
-        </div>
+        
         
     </div>
 </template>
@@ -62,12 +56,6 @@ export default {
                 items: []
             }
         }
-        return {
-            paypal: {
-            sandbox: '<sandbox client id>',
-            production: '<production client id>'
-      }
-    }
     },
     mounted(){
         this.carrito = this.$store.state.carrito
